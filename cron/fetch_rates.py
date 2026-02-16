@@ -1,17 +1,29 @@
+from time import time
 import requests
 import psycopg2
 import os
 from datetime import date
 
+retries = 5
+for i in range(retries):
+    try:
+        conn = psycopg2.connect(
+            host=os.getenv("DB_HOST", "postgres"),
+            dbname=os.getenv("DB_NAME", "currency"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASS"),
+        )
+        break
+    except psycopg2.OperationalError as e:
+        print(f"DB connection failed ({i+1}/{retries}), retrying...")
+        time.sleep(5)
+else:
+    print("Could not connect to database after retries")
+    exit(1)
+
+
 API_URL = "https://api.frankfurter.app/"
 BASE = "USD"
-
-conn = psycopg2.connect(
-    host=os.getenv("DB_HOST", "postgres"),
-    dbname=os.getenv("DB_NAME", "currency"),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASS"),
-)
 
 cur = conn.cursor()
 

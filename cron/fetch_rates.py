@@ -9,8 +9,8 @@ BASE = "USD"
 conn = psycopg2.connect(
     host=os.getenv("DB_HOST", "postgres"),
     dbname=os.getenv("DB_NAME", "currency"),
-    user=os.getenv("DB_USER", "currency"),
-    password=os.getenv("DB_PASS", "currency"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASS"),
 )
 
 cur = conn.cursor()
@@ -37,7 +37,6 @@ if "rates" not in data:
 
 for rate_date, currencies in data["rates"].items():
     for currency, rate in currencies.items():
-        # перевіряємо чи запис вже існує
         cur.execute(
             """
             SELECT 1 FROM exchange_rates

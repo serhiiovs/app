@@ -7,8 +7,8 @@ app = FastAPI()
 
 DB_HOST = os.getenv("DB_HOST", "postgres")
 DB_NAME = os.getenv("DB_NAME", "currency")
-DB_USER = os.getenv("DB_USER", "currency")
-DB_PASS = os.getenv("DB_PASS", "currency")
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
 
 def get_conn():
     return psycopg2.connect(
